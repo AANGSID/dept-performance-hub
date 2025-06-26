@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, BarChart3 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const UserDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -93,6 +94,28 @@ export const UserDashboard: React.FC = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+          <CardDescription>Access key features and reports</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4">
+            <Link to="/review-feedback">
+              <Button className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
+                <BarChart3 className="w-4 h-4" />
+                <span>Review & Feedback</span>
+              </Button>
+            </Link>
+            <Button variant="outline" className="flex items-center space-x-2">
+              <AlertCircle className="w-4 h-4" />
+              <span>Submit Suggestion</span>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Departments to Survey */}
       <Card>
