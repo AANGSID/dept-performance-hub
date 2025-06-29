@@ -1,16 +1,9 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, LoginCredentials, AuthContextType } from '../types';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock data for demonstration - replace with actual API calls
-const mockUsers: User[] = [
-  { id: 1, username: 'admin', dept_id: 1, is_admin: true },
-  { id: 2, username: 'user1', dept_id: 2, is_admin: false },
-  { id: 3, username: 'user2', dept_id: 3, is_admin: false },
-];
-
+// Mock departments data
 const mockDepartments = [
   { id: 1, name: 'Administration' },
   { id: 2, name: 'Human Resources' },
@@ -52,15 +45,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Mock authentication - replace with actual API call
-    const foundUser = mockUsers.find(
-      u => u.username === credentials.username
+    // Check admin credentials first (unchanged)
+    if (credentials.username === 'admin') {
+      const adminUser = {
+        id: 1,
+        username: 'admin',
+        dept_id: 1,
+        is_admin: true,
+        department: mockDepartments.find(d => d.id === 1)
+      };
+      
+      setUser(adminUser);
+      localStorage.setItem('survey_user', JSON.stringify(adminUser));
+      setIsLoading(false);
+      return true;
+    }
+    
+    // Check registered users
+    const registeredUsers = JSON.parse(localStorage.getItem('survey_registered_users') || '[]');
+    const foundUser = registeredUsers.find((u: any) => 
+      u.username === credentials.username && u.password === credentials.password
     );
     
     if (foundUser) {
-      // In real implementation, verify password hash
       const department = mockDepartments.find(d => d.id === foundUser.dept_id);
-      const userWithDept = { ...foundUser, department };
+      const userWithDept = { 
+        id: foundUser.id,
+        username: foundUser.username,
+        dept_id: foundUser.dept_id,
+        is_admin: foundUser.is_admin,
+        department 
+      };
       
       setUser(userWithDept);
       localStorage.setItem('survey_user', JSON.stringify(userWithDept));

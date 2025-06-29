@@ -7,11 +7,13 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ForgotPassword } from './ForgotPassword';
+import { Registration } from './Registration';
 
 export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showRegistration, setShowRegistration] = useState(false);
   const { login, isLoading } = useAuth();
   const { toast } = useToast();
 
@@ -43,8 +45,25 @@ export const Login: React.FC = () => {
     }
   };
 
+  const handleRegistrationSuccess = () => {
+    setShowRegistration(false);
+    toast({
+      title: 'Registration Complete',
+      description: 'Please login with your new credentials',
+    });
+  };
+
   if (showForgotPassword) {
     return <ForgotPassword onBackToLogin={() => setShowForgotPassword(false)} />;
+  }
+
+  if (showRegistration) {
+    return (
+      <Registration 
+        onBackToLogin={() => setShowRegistration(false)}
+        onRegistrationSuccess={handleRegistrationSuccess}
+      />
+    );
   }
 
   return (
@@ -91,22 +110,28 @@ export const Login: React.FC = () => {
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
-            <Button
-              type="button"
-              variant="link"
-              onClick={() => setShowForgotPassword(true)}
-              disabled={isLoading}
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              Forgot your password?
-            </Button>
+            <div className="flex flex-col space-y-2 w-full">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowRegistration(true)}
+                disabled={isLoading}
+                className="w-full"
+              >
+                Create New Account
+              </Button>
+              <Button
+                type="button"
+                variant="link"
+                onClick={() => setShowForgotPassword(true)}
+                disabled={isLoading}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                Forgot your password?
+              </Button>
+            </div>
           </CardFooter>
         </form>
-        <div className="p-4 text-xs text-gray-500 text-center">
-          <p>Demo credentials:</p>
-          <p>Admin: username="admin", password="any"</p>
-          <p>User: username="user1", password="any"</p>
-        </div>
       </Card>
     </div>
   );
