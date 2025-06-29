@@ -5,11 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, AlertCircle, BarChart3 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { CheckCircle, Clock, AlertCircle, BarChart3, MessageSquare } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const UserDashboard: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   // Mock data - replace with actual API calls
   const surveyData = {
@@ -57,6 +58,18 @@ export const UserDashboard: React.FC = () => {
         Pending
       </Badge>
     );
+  };
+
+  const handleStartSurvey = (deptId: number) => {
+    navigate(`/survey/${deptId}`);
+  };
+
+  const handleViewSurvey = (deptId: number) => {
+    navigate(`/survey/${deptId}?view=true`);
+  };
+
+  const handleSubmitSuggestion = () => {
+    navigate('/suggestions');
   };
 
   return (
@@ -109,8 +122,12 @@ export const UserDashboard: React.FC = () => {
                 <span>Review & Feedback</span>
               </Button>
             </Link>
-            <Button variant="outline" className="flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4" />
+            <Button 
+              variant="outline" 
+              className="flex items-center space-x-2"
+              onClick={handleSubmitSuggestion}
+            >
+              <MessageSquare className="w-4 h-4" />
               <span>Submit Suggestion</span>
             </Button>
           </div>
@@ -142,10 +159,7 @@ export const UserDashboard: React.FC = () => {
                       <Button 
                         size="sm" 
                         className="w-full"
-                        onClick={() => {
-                          // Navigate to survey page
-                          console.log(`Starting survey for ${dept.name}`);
-                        }}
+                        onClick={() => handleStartSurvey(dept.id)}
                       >
                         Start Survey
                       </Button>
@@ -154,10 +168,7 @@ export const UserDashboard: React.FC = () => {
                         variant="outline" 
                         size="sm" 
                         className="w-full"
-                        onClick={() => {
-                          // View/edit existing survey
-                          console.log(`Viewing survey for ${dept.name}`);
-                        }}
+                        onClick={() => handleViewSurvey(dept.id)}
                       >
                         View Survey
                       </Button>

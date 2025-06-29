@@ -4,18 +4,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
 import { AdminCharts } from './AdminCharts';
 import { UserManagement } from './UserManagement';
 import { SurveyPermissions } from './SurveyPermissions';
 import { SuggestionsView } from './SuggestionsView';
 
 export const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
+  
   // Mock data - replace with actual API calls
   const stats = {
     totalDepartments: 17,
     submissionsToday: 12,
     submissionsWeek: 89,
     alertDepartments: ['IT Department', 'Legal Department'],
+  };
+
+  const handleDepartmentClick = (departmentName: string) => {
+    navigate(`/department-details/${encodeURIComponent(departmentName)}`);
   };
 
   return (
@@ -59,11 +66,17 @@ export const AdminDashboard: React.FC = () => {
             The following departments have ratings below 80%:
             <div className="mt-2 space-x-2">
               {stats.alertDepartments.map((dept) => (
-                <Badge key={dept} variant="destructive" className="text-xs">
+                <Badge 
+                  key={dept} 
+                  variant="destructive" 
+                  className="text-xs cursor-pointer hover:bg-red-700 transition-colors"
+                  onClick={() => handleDepartmentClick(dept)}
+                >
                   {dept}
                 </Badge>
               ))}
             </div>
+            <p className="text-xs mt-2 text-red-600">Click on department names to view detailed performance analysis</p>
           </AlertDescription>
         </Alert>
       )}

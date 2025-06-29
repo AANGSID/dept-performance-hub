@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
-import { Star, MessageSquare, TrendingUp, Award, Users, BarChart3 } from 'lucide-react';
+import { Star, MessageSquare, TrendingUp, Award, Users, BarChart3, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { FeedbackOverview } from '../components/feedback/FeedbackOverview';
 import { DepartmentRatings } from '../components/feedback/DepartmentRatings';
 import { RecentFeedback } from '../components/feedback/RecentFeedback';
@@ -21,12 +22,12 @@ const ReviewFeedback = () => {
   };
 
   const departmentData = [
-    { id: 1, name: 'Human Resources', avgRating: 4.5, totalResponses: 45, trend: 'up' },
-    { id: 2, name: 'Information Technology', avgRating: 4.3, totalResponses: 52, trend: 'up' },
-    { id: 3, name: 'Finance', avgRating: 4.1, totalResponses: 38, trend: 'stable' },
-    { id: 4, name: 'Marketing', avgRating: 3.9, totalResponses: 41, trend: 'down' },
-    { id: 5, name: 'Sales', avgRating: 4.4, totalResponses: 35, trend: 'up' },
-    { id: 6, name: 'Production', avgRating: 4.0, totalResponses: 23, trend: 'stable' },
+    { id: 1, name: 'Human Resources', avgRating: 4.5, totalResponses: 45, trend: 'up' as const },
+    { id: 2, name: 'Information Technology', avgRating: 4.3, totalResponses: 52, trend: 'up' as const },
+    { id: 3, name: 'Finance', avgRating: 4.1, totalResponses: 38, trend: 'stable' as const },
+    { id: 4, name: 'Marketing', avgRating: 3.9, totalResponses: 41, trend: 'down' as const },
+    { id: 5, name: 'Sales', avgRating: 4.4, totalResponses: 35, trend: 'up' as const },
+    { id: 6, name: 'Production', avgRating: 4.0, totalResponses: 23, trend: 'stable' as const },
   ];
 
   return (
@@ -35,9 +36,17 @@ const ReviewFeedback = () => {
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Review & Feedback</h1>
-              <p className="text-gray-600 mt-1">Comprehensive departmental performance insights</p>
+            <div className="flex items-center space-x-4">
+              <Link to="/">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back to Dashboard</span>
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Review & Feedback</h1>
+                <p className="text-gray-600 mt-1">Comprehensive departmental performance insights</p>
+              </div>
             </div>
             <Badge variant="secondary" className="bg-blue-100 text-blue-800">
               <BarChart3 className="w-4 h-4 mr-1" />
