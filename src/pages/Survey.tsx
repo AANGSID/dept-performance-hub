@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,15 +8,18 @@ import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Star, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '../contexts/AuthContext';
 
 const Survey = () => {
   const { departmentId } = useParams();
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   
-  // Mock department data
+  // Mock department data - you could enhance this to fetch from a departments list
   const department = {
     id: parseInt(departmentId || '1'),
-    name: 'Human Resources',
+    name: 'Human Resources', // This should be dynamic based on departmentId
     description: 'Please rate your experience with the HR department'
   };
 
@@ -59,16 +62,47 @@ const Survey = () => {
       return;
     }
 
+    if (!user) {
+      toast({
+        title: "Authentication Error",
+        description: "You must be logged in to submit a survey.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
-    // Simulate API call
+    // Create submission object
+    const submission = {
+      id: Date.now(), // Simple ID generation
+      user_id: user.id,
+      from_dept_id: user.dept_id,
+      to_dept_id: parseInt(departmentId || '1'),
+      q1: ratings.q1,
+      q2: ratings.q2,
+      q3: ratings.q3,
+      q4: ratings.q4,
+      q5: ratings.q5,
+      remark: remark || '',
+      timestamp: new Date().toISOString()
+    };
+
+    // Save to localStorage
+    const existingSubmissions = JSON.parse(localStorage.getItem('survey_submissions') || '[]');
+    existingSubmissions.push(submission);
+    localStorage.setItem('survey_submissions', JSON.stringify(existingSubmissions));
+
+    // Simulate API call delay
     setTimeout(() => {
       toast({
         title: "Survey Submitted!",
         description: `Your feedback for ${department.name} has been recorded.`,
       });
       setIsSubmitting(false);
-      // Reset form or redirect
+      
+      // Navigate back to dashboard
+      navigate('/');
     }, 2000);
   };
 

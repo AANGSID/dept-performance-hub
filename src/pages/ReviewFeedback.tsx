@@ -11,24 +11,11 @@ import { FeedbackOverview } from '../components/feedback/FeedbackOverview';
 import { DepartmentRatings } from '../components/feedback/DepartmentRatings';
 import { RecentFeedback } from '../components/feedback/RecentFeedback';
 import { FeedbackAnalytics } from '../components/feedback/FeedbackAnalytics';
+import { getOverviewStats } from '../utils/surveyDataUtils';
 
 const ReviewFeedback = () => {
-  // Mock data - replace with actual API calls
-  const overviewStats = {
-    totalResponses: 234,
-    averageRating: 4.2,
-    completionRate: 78,
-    pendingReviews: 12
-  };
-
-  const departmentData = [
-    { id: 1, name: 'Human Resources', avgRating: 4.5, totalResponses: 45, trend: 'up' as const },
-    { id: 2, name: 'Information Technology', avgRating: 4.3, totalResponses: 52, trend: 'up' as const },
-    { id: 3, name: 'Finance', avgRating: 4.1, totalResponses: 38, trend: 'stable' as const },
-    { id: 4, name: 'Marketing', avgRating: 3.9, totalResponses: 41, trend: 'down' as const },
-    { id: 5, name: 'Sales', avgRating: 4.4, totalResponses: 35, trend: 'up' as const },
-    { id: 6, name: 'Production', avgRating: 4.0, totalResponses: 23, trend: 'stable' as const },
-  ];
+  // Get real data from survey submissions
+  const overviewStats = getOverviewStats();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -115,13 +102,13 @@ const ReviewFeedback = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Department Ratings */}
           <div className="lg:col-span-2 space-y-6">
-            <DepartmentRatings departments={departmentData} />
+            <DepartmentRatings />
             <FeedbackAnalytics />
           </div>
 
           {/* Right Column - Overview and Recent Feedback */}
           <div className="space-y-6">
-            <FeedbackOverview stats={overviewStats} />
+            <FeedbackOverview />
             <RecentFeedback />
           </div>
         </div>

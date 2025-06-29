@@ -4,17 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { getOverviewStats } from '../../utils/surveyDataUtils';
 
-interface FeedbackOverviewProps {
-  stats: {
-    totalResponses: number;
-    averageRating: number;
-    completionRate: number;
-    pendingReviews: number;
-  };
-}
+export const FeedbackOverview: React.FC = () => {
+  // Get real data from survey submissions
+  const stats = getOverviewStats();
 
-export const FeedbackOverview: React.FC<FeedbackOverviewProps> = ({ stats }) => {
   return (
     <Card>
       <CardHeader>
@@ -54,7 +49,9 @@ export const FeedbackOverview: React.FC<FeedbackOverviewProps> = ({ stats }) => 
             <span className="text-sm font-medium">Performance Trend</span>
             <div className="flex items-center text-green-600">
               <TrendingUp className="w-4 h-4 mr-1" />
-              <span className="text-sm">+12% this month</span>
+              <span className="text-sm">
+                {stats.totalResponses > 0 ? `Avg: ${stats.averageRating}/5` : 'No data yet'}
+              </span>
             </div>
           </div>
         </div>
