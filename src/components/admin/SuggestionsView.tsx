@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 
 export const SuggestionsView: React.FC = () => {
-  const [filterDept, setFilterDept] = useState('');
+  const [filterDept, setFilterDept] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
   // Mock suggestions data
@@ -45,7 +45,7 @@ export const SuggestionsView: React.FC = () => {
   const departments = ['HR', 'IT', 'Finance', 'Marketing', 'Sales', 'Production', 'QC', 'R&D'];
 
   const filteredSuggestions = suggestions.filter(suggestion => {
-    const matchesDept = !filterDept || suggestion.toDept === filterDept;
+    const matchesDept = filterDept === 'all' || suggestion.toDept === filterDept;
     const matchesSearch = !searchTerm || suggestion.remark.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesDept && matchesSearch;
   });
@@ -68,12 +68,12 @@ export const SuggestionsView: React.FC = () => {
             />
           </div>
           <div className="w-full md:w-48">
-            <Select onValueChange={setFilterDept}>
+            <Select value={filterDept} onValueChange={setFilterDept}>
               <SelectTrigger>
                 <SelectValue placeholder="Filter by department" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Departments</SelectItem>
+                <SelectItem value="all">All Departments</SelectItem>
                 {departments.map((dept) => (
                   <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                 ))}
