@@ -6,10 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { ForgotPassword } from './ForgotPassword';
 
 export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { login, isLoading } = useAuth();
   const { toast } = useToast();
 
@@ -40,6 +42,10 @@ export const Login: React.FC = () => {
       });
     }
   };
+
+  if (showForgotPassword) {
+    return <ForgotPassword onBackToLogin={() => setShowForgotPassword(false)} />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -77,13 +83,22 @@ export const Login: React.FC = () => {
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col space-y-3">
             <Button 
               type="submit" 
               className="w-full"
               disabled={isLoading}
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
+            </Button>
+            <Button
+              type="button"
+              variant="link"
+              onClick={() => setShowForgotPassword(true)}
+              disabled={isLoading}
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              Forgot your password?
             </Button>
           </CardFooter>
         </form>
